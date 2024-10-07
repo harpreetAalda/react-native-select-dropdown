@@ -9,6 +9,7 @@ import {useSelectDropdown} from './hooks/useSelectDropdown';
 import {useLayoutDropdown} from './hooks/useLayoutDropdown';
 import {useRefs} from './hooks/useRefs';
 import {findIndexInArr} from './helpers/findIndexInArr';
+import AddIcon from '../../../src/assets/icons/AddIcon';
 
 const SelectDropdown = (
   {
@@ -125,6 +126,7 @@ const SelectDropdown = (
   const renderSearchView = () => {
     return (
       search && (
+        <View style={{flexDirection: 'row'}}>
         <Input
           searchViewWidth={buttonLayout.w}
           value={searchTxt}
@@ -140,6 +142,8 @@ const SelectDropdown = (
           renderLeft={renderSearchInputLeftIcon}
           renderRight={renderSearchInputRightIcon}
         />
+            <AddIcon/>
+            </View>
       )
     );
   };
