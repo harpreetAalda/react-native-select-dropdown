@@ -107,6 +107,8 @@ declare module 'react-native-select-dropdown' {
      * function returns React component for search input icon
      */
     renderSearchInputRightIcon?: (selectedItem: any, index: number) => React.ReactNode;
+
+    onScroll?: () => void;
   };
 
   export default class SelectDropdown extends React.Component<SelectDropdownProps> {
