@@ -58,8 +58,8 @@ export const useLayoutDropdown = (data, dropdownStyle) => {
 
     return {
       ...{
-        borderTopWidth: 0,
-        overflow: 'hidden',
+        // borderTopWidth: 0,
+        // overflow: 'hidden',
       },
       ...dropdownStyle,
       ...dropdownCalculatedStyle,
