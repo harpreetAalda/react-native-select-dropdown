@@ -1,5 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useCallback} from 'react';
-import {View, TouchableOpacity, FlatList} from 'react-native';
+import {View, TouchableOpacity, FlatList, Pressable} from 'react-native';
 import {isExist} from './helpers/isExist';
 import Input from './components/Input';
 import DropdownOverlay from './components/DropdownOverlay';
@@ -9,7 +9,6 @@ import {useSelectDropdown} from './hooks/useSelectDropdown';
 import {useLayoutDropdown} from './hooks/useLayoutDropdown';
 import {useRefs} from './hooks/useRefs';
 import {findIndexInArr} from './helpers/findIndexInArr';
-import AddIcon from '../../../src/assets/icons/AddIcon';
 
 const SelectDropdown = (
   {
@@ -41,6 +40,7 @@ const SelectDropdown = (
     renderSearchInputLeftIcon /* function returns React component for search input icon */,
     renderSearchInputRightIcon /* function returns React component for search input icon */,
     onChangeSearchInputText /* function callback when the search input text changes, this will automatically disable the dropdown's interna search to be implemented manually outside the component  */,
+    onScroll,
   },
   ref,
 ) => {
@@ -126,7 +126,6 @@ const SelectDropdown = (
   const renderSearchView = () => {
     return (
       search && (
-        <View style={{flexDirection: 'row'}}>
         <Input
           searchViewWidth={buttonLayout.w}
           value={searchTxt}
@@ -142,8 +141,6 @@ const SelectDropdown = (
           renderLeft={renderSearchInputLeftIcon}
           renderRight={renderSearchInputRightIcon}
         />
-            <AddIcon/>
-            </View>
       )
     );
   };
@@ -155,13 +152,13 @@ const SelectDropdown = (
     let props = {...clonedElement.props};
     return (
       isExist(item) && (
-        <TouchableOpacity
+        <Pressable
           {...props}
           disabled={disabledIndexes?.includes(index)}
           activeOpacity={0.8}
           onPress={() => onSelectItem(item, index)}>
           {props?.children}
-        </TouchableOpacity>
+        </Pressable>
       )
     );
   };
@@ -171,20 +168,36 @@ const SelectDropdown = (
         <DropdownModal statusBarTranslucent={statusBarTranslucent} visible={isVisible} onRequestClose={onRequestClose}>
           <DropdownOverlay onPress={closeDropdown} backgroundColor={dropdownOverlayColor} />
           <DropdownWindow layoutStyle={dropdownWindowStyle}>
-            <FlatList
-              testID={testID}
-              data={dataArr}
-              keyExtractor={(item, index) => index.toString()}
-              ref={dropDownFlatlistRef}
-              renderItem={renderFlatlistItem}
-              ListHeaderComponent={renderSearchView()}
-              stickyHeaderIndices={search && [0]}
-              keyboardShouldPersistTaps="always"
-              onEndReached={() => onScrollEndReached && onScrollEndReached()}
-              onEndReachedThreshold={0.5}
-              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-              onScrollToIndexFailed={onScrollToIndexFailed}
-            />
+            {isVisible && renderSearchView()}
+          {/*</DropdownWindow>*/}
+          {/*<DropdownWindow layoutStyle={dropdownWindowStyle}>*/}
+          {/*  <View style={{*/}
+          {/*    // marginTop: 10,*/}
+          {/*    height: search?'100%':150,*/}
+          {/*    paddingVertical: 10,*/}
+          {/*    borderWidth: 1,*/}
+          {/*    backgroundColor: 'green',*/}
+          {/*    borderColor: 'red'*/}
+          {/*  }}>*/}
+              <FlatList
+                testID={testID}
+                data={dataArr}
+                keyExtractor={(item, index) => index.toString()}
+                ref={dropDownFlatlistRef}
+                renderItem={renderFlatlistItem}
+                // ListHeaderComponent={renderSearchView()}
+                // stickyHeaderIndices={search && [0]}
+                keyboardShouldPersistTaps="always"
+                onEndReached={() => onScrollEndReached && onScrollEndReached()}
+                onEndReachedThreshold={0.5}
+                showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+                onScrollToIndexFailed={onScrollToIndexFailed}
+                bounces={false}
+                overScrollMode={'never'}
+                onScroll={()=>onScroll && onScroll()}
+              />
+          {/*    {search && <View style={{height: 30, backgroundColor: 'orange'}}/> }*/}
+          {/*  </View>*/}
           </DropdownWindow>
         </DropdownModal>
       )
