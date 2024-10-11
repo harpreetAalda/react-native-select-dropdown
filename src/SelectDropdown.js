@@ -62,7 +62,7 @@ const SelectDropdown = (
     onDropdownButtonLayout,
     dropdownWindowStyle,
     onRequestClose,
-  } = useLayoutDropdown(data, dropdownStyle);
+  } = useLayoutDropdown(data, dropdownStyle, search);
   useImperativeHandle(ref, () => ({
     reset: () => {
       reset();
