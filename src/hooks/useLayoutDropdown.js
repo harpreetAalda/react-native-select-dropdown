@@ -27,14 +27,14 @@ export const useLayoutDropdown = (data, dropdownStyle) => {
 
     if (py + h > height - remainingHeight) {
       return setDropdownCalculatedStyle({
-        bottom: height - (py + h) + h,
+        bottom: height - (py + h) + h -  52,
         width: dropdownStyle?.width || w,
         ...(I18nManager.isRTL ? {right: dropdownStyle?.right || px} : {left: dropdownStyle?.left || px}),
       });
     }
 
     return setDropdownCalculatedStyle({
-      top: py + h + 2,
+      top: py + h + 2 - 52,
       width: dropdownStyle?.width || w,
       ...(I18nManager.isRTL ? {right: dropdownStyle?.right || px} : {left: dropdownStyle?.left || px}),
     });
