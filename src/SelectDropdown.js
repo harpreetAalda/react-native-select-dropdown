@@ -1,5 +1,5 @@
-import React, {forwardRef, useImperativeHandle, useCallback} from 'react';
-import {View, TouchableOpacity, FlatList, Pressable} from 'react-native';
+import React, {forwardRef, useImperativeHandle, useCallback, useState} from 'react';
+import {View, TouchableOpacity, FlatList, Pressable, I18nManager, Dimensions} from 'react-native';
 import {isExist} from './helpers/isExist';
 import Input from './components/Input';
 import DropdownOverlay from './components/DropdownOverlay';
@@ -77,9 +77,20 @@ const SelectDropdown = (
       selectItem(index);
     },
   }));
+
+  const [isReverse, setIsReverse] = useState(false);
   /* ******************* Methods ******************* */
   const openDropdown = () => {
     dropdownButtonRef.current.measure((fx, fy, w, h, px, py) => {
+      const {height} = Dimensions.get('window');
+      const remainingHeight = dropdownStyle?.height || height / 4;
+      if (py + h > height - remainingHeight) {
+        // reverse
+        setIsReverse(true)
+      }else {
+        // normal
+        setIsReverse(false)
+      }
       onDropdownButtonLayout(w, h, px, py);
       setIsVisible(true);
       onFocus && onFocus();
@@ -168,36 +179,26 @@ const SelectDropdown = (
         <DropdownModal statusBarTranslucent={statusBarTranslucent} visible={isVisible} onRequestClose={onRequestClose}>
           <DropdownOverlay onPress={closeDropdown} backgroundColor={dropdownOverlayColor} />
           <DropdownWindow layoutStyle={dropdownWindowStyle}>
-            {isVisible && renderSearchView()}
-          {/*</DropdownWindow>*/}
-          {/*<DropdownWindow layoutStyle={dropdownWindowStyle}>*/}
-          {/*  <View style={{*/}
-          {/*    // marginTop: 10,*/}
-          {/*    height: search?'100%':150,*/}
-          {/*    paddingVertical: 10,*/}
-          {/*    borderWidth: 1,*/}
-          {/*    backgroundColor: 'green',*/}
-          {/*    borderColor: 'red'*/}
-          {/*  }}>*/}
-              <FlatList
-                testID={testID}
-                data={dataArr}
-                keyExtractor={(item, index) => index.toString()}
-                ref={dropDownFlatlistRef}
-                renderItem={renderFlatlistItem}
-                // ListHeaderComponent={renderSearchView()}
-                // stickyHeaderIndices={search && [0]}
-                keyboardShouldPersistTaps="always"
-                onEndReached={() => onScrollEndReached && onScrollEndReached()}
-                onEndReachedThreshold={0.5}
-                showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-                onScrollToIndexFailed={onScrollToIndexFailed}
-                bounces={false}
-                overScrollMode={'never'}
-                onScroll={()=>onScroll && onScroll()}
-              />
-          {/*    {search && <View style={{height: 30, backgroundColor: 'orange'}}/> }*/}
-          {/*  </View>*/}
+            {!isReverse && isVisible && renderSearchView()}
+            <FlatList
+              style={{marginVertical: isReverse?10:0}}
+              testID={testID}
+              data={dataArr}
+              keyExtractor={(item, index) => index.toString()}
+              ref={dropDownFlatlistRef}
+              renderItem={renderFlatlistItem}
+              // ListHeaderComponent={renderSearchView()}
+              // stickyHeaderIndices={search && [0]}
+              keyboardShouldPersistTaps="always"
+              onEndReached={() => onScrollEndReached && onScrollEndReached()}
+              onEndReachedThreshold={0.5}
+              showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+              onScrollToIndexFailed={onScrollToIndexFailed}
+              bounces={false}
+              overScrollMode={'never'}
+              onScroll={()=>onScroll && onScroll()}
+            />
+            {isReverse && isVisible && renderSearchView()}
           </DropdownWindow>
         </DropdownModal>
       )
