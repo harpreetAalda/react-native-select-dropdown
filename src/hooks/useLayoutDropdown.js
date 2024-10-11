@@ -5,7 +5,7 @@ import {useKeyboardHeight} from './useKeyboardHeight';
 const {height} = Dimensions.get('window');
 const DROPDOWN_MAX_HEIGHT = height * 0.4;
 
-export const useLayoutDropdown = (data, dropdownStyle) => {
+export const useLayoutDropdown = (data, dropdownStyle, search=false) => {
   const [isVisible, setIsVisible] = useState(false); // dropdown visible ?
   const [buttonLayout, setButtonLayout] = useState(null);
   const [dropdownCalculatedStyle, setDropdownCalculatedStyle] = useState({});
@@ -26,15 +26,24 @@ export const useLayoutDropdown = (data, dropdownStyle) => {
     const remainingHeight = dropdownStyle?.height || height / 4;
 
     if (py + h > height - remainingHeight) {
+      let bottom = (py + h) + h;
+      if(search){
+        bottom -= 52;
+      }
       return setDropdownCalculatedStyle({
-        bottom: height - (py + h) + h -  52,
+        bottom: height - (bottom),
         width: dropdownStyle?.width || w,
         ...(I18nManager.isRTL ? {right: dropdownStyle?.right || px} : {left: dropdownStyle?.left || px}),
       });
     }
 
+    let top = py + h + 2;
+    if(search){
+      top -= 52;
+    }
+
     return setDropdownCalculatedStyle({
-      top: py + h + 2 - 52,
+      top,
       width: dropdownStyle?.width || w,
       ...(I18nManager.isRTL ? {right: dropdownStyle?.right || px} : {left: dropdownStyle?.left || px}),
     });
