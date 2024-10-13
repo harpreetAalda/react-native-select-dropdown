@@ -23,6 +23,9 @@
     "type": "git",
     "url": "https://github.com/harpreetAalda/react-native-select-dropdown"
   },
+  "dependencies": {
+    "react": "18.3.1"
+  },
   "author": "Adel Reda (AdelRedaa97)",
   "license": "MIT"
 }
