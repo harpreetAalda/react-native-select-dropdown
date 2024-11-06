@@ -20,6 +20,7 @@ const Input = (
     renderLeft,
     renderRight,
     testID,
+    showTagInSearchBar,
   },
   ref,
 ) => {
@@ -50,11 +51,24 @@ const Input = (
   };
 
   return (
-    <View style={{...styles.searchViewStyle, ...{width: searchViewWidth}}}>
+    <View style={{...styles.searchViewStyle}}>
       <View
         style={{
           ...styles.defaultInputStyle,
           ...defaults.inputStyle,
+          ...(showTagInSearchBar && {
+            borderTopRightRadius: 5,
+            borderBottomRightRadius: 5,
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            borderColor: '#3366FF',
+          }),
+          ...(!showTagInSearchBar && {
+            borderRadius: 5,
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            borderColor: '#3366FF',
+          }),
         }}>
         {defaults.renderLeft && <View style={styles.pressableLeft}>{defaults.renderLeft()}</View>}
         <TextInput
@@ -68,7 +82,7 @@ const Input = (
           onEndEditing={defaults.onEndEditing}
           onSubmitEditing={defaults.onSubmitEditing}
           //
-          style={{...styles.inputField, color: defaults.valueColor, ...defaults.inputTextStyle}}
+          style={{...styles.inputField, color: defaults.valueColor, ...defaults.inputTextStyle,}}
           returnKeyType={'done'}
           textContentType={'oneTimeCode'}
           allowFontScaling={false}
@@ -104,6 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000',
     textAlignVertical: 'center',
     paddingVertical: 0,
+    width: '100%',
   },
   pressableLeft: {
     height: '100%',
