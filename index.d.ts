@@ -109,6 +109,12 @@ declare module 'react-native-select-dropdown' {
     renderSearchInputRightIcon?: (selectedItem: any, index: number) => React.ReactNode;
 
     onScroll?: () => void;
+    
+    showTagInSearchBar?: boolean;
+    tagBgColor?: string;
+    tagTextColor?: string;
+    tagTextFontSize?: number;
+    tagText?: string;
   };
 
   export default class SelectDropdown extends React.Component<SelectDropdownProps> {
