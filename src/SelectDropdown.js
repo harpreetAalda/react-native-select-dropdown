@@ -1,5 +1,5 @@
 import React, {forwardRef, useImperativeHandle, useCallback, useState} from 'react';
-import {View, TouchableOpacity, FlatList, Pressable, I18nManager, Dimensions} from 'react-native';
+import {Text, View, TouchableOpacity, FlatList, Pressable, I18nManager, Dimensions} from 'react-native';
 import {isExist} from './helpers/isExist';
 import Input from './components/Input';
 import DropdownOverlay from './components/DropdownOverlay';
@@ -41,6 +41,11 @@ const SelectDropdown = (
     renderSearchInputRightIcon /* function returns React component for search input icon */,
     onChangeSearchInputText /* function callback when the search input text changes, this will automatically disable the dropdown's interna search to be implemented manually outside the component  */,
     onScroll,
+    showTagInSearchBar,
+    tagBgColor,
+    tagTextColor,
+    tagTextFontSize,
+    tagText,
   },
   ref,
 ) => {
@@ -137,21 +142,41 @@ const SelectDropdown = (
   const renderSearchView = () => {
     return (
       search && (
-        <Input
-          searchViewWidth={buttonLayout.w}
-          value={searchTxt}
-          valueColor={searchInputTxtColor}
-          placeholder={searchPlaceHolder}
-          placeholderTextColor={searchPlaceHolderColor}
-          onChangeText={txt => {
-            setSearchTxt(txt);
-            disabledInternalSearch && onChangeSearchInputText(txt);
-          }}
-          inputStyle={searchInputStyle}
-          inputTextStyle={searchInputTxtStyle}
-          renderLeft={renderSearchInputLeftIcon}
-          renderRight={renderSearchInputRightIcon}
-        />
+        <View style={{flexDirection: 'row', gap: 10, width: buttonLayout.w, ...searchInputStyle}}>
+          {showTagInSearchBar && (
+            <View
+              style={{
+                backgroundColor: tagBgColor,
+                paddingVertical: 5,
+                paddingHorizontal: 10,
+                borderRadius: 5,
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 10,
+              }}>
+              <Text style={{color: tagTextColor, fontSize: tagTextFontSize}}>{tagText}</Text>
+            </View>
+          )}
+          <View style={{width: '100%', flex: 1, height: '100%', justifyContent: 'center', alignItems: 'center'}}>
+            <Input
+              // searchViewWidth={buttonLayout.w}
+              style={{flex: 1, width: '100%'}}
+              value={searchTxt}
+              valueColor={searchInputTxtColor}
+              placeholder={searchPlaceHolder}
+              placeholderTextColor={searchPlaceHolderColor}
+              onChangeText={txt => {
+                setSearchTxt(txt);
+                disabledInternalSearch && onChangeSearchInputText(txt);
+              }}
+              // inputStyle={searchInputStyle}
+              inputTextStyle={searchInputTxtStyle}
+              renderLeft={renderSearchInputLeftIcon}
+              renderRight={renderSearchInputRightIcon}
+              showTagInSearchBar={showTagInSearchBar}
+            />
+          </View>
+        </View>
       )
     );
   };
